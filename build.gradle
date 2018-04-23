@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'java-library-distribution'
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()
@@ -9,8 +10,8 @@ project.version '1.0.0'
 
 dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile 'com.google.guava:guava:19.0'
-    compile 'com.google.code.gson:gson:2.5'
+    compile 'com.google.guava:guava:24.1-jre'
+    compile 'com.google.code.gson:gson:2.6.2'
     testCompile 'junit:junit:4.+'
     testCompile 'com.google.truth:truth:0.28'
 }
@@ -29,6 +30,25 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     baseName 'schema-org-client'
     classifier 'sources'
     from sourceSets.main.allSource
+}
+
+task createPom << {
+    pom {
+        project {
+            groupId 'com.google.schemaorg'
+            artifactId 'schema-org-client'
+            version '1.0.1-SNAPSHOT'
+
+            inceptionYear '2016'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
 }
 
 uploadArchives {
